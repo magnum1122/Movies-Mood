@@ -5,7 +5,7 @@ export const TMDB_CONFIG = {
         accept: 'application/json',
         Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOVIE_API_KEY}`
     }
-}
+};
 
 export const fetchMovies = async ({ query }: {query: string}) => {
     const endpoint = query  ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}` 
