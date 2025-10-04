@@ -10,7 +10,7 @@ interface Props {
 const SearchBar = ({placeholder, onPress}: Props) => {
 
   return (
-    <View style={{ height: "6.5%" }} className="relative z-10 rounded-full">
+    <View className="relative z-10 rounded-full">
       <View
         className={"flex-row justify-end items-center pr-2 bg-white-45 rounded-full"}
       >
