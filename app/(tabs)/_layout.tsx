@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from 'expo-router'
-import { Image, ImageBackground, Text, View } from 'react-native'
+import { ImageBackground, StatusBar, Text, View } from 'react-native'
 import { images } from '@/constants/images'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
