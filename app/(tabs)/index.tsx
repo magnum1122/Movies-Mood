@@ -1,12 +1,12 @@
+import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
-import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
-import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
-import MovieCard from "@/components/MovieCard";
+import useFetch from "@/services/useFetch";
+import { useRouter } from "expo-router";
+import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
   const insets = useSafeAreaInsets();
@@ -27,54 +27,55 @@ export default function Index() {
       className="flex-1  bg-primary"
     >
       <Image source={images.bg} className="absolute w-full z-0" />
-      <ScrollView
-        className="flex-1 px-5"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}
-      >
-        <Image source={icons.logo} className="w-12 h-10 mt-10 mb-2 mx-auto" />
-
-        {moviesLoading ? (
-          <ActivityIndicator
-            size="large"
-            color={"#FF6467"}
-            className="mt-10 self-center"
-          />
-        ) : moviesError ? (
-          <Text>Error: {moviesError?.message}</Text>
-        ) : (
-          // SearchBar
-          <View className="mt-5">
-            <SearchBar
-              onPress={() => router.push("/search")}
-              placeholder="Search for a movie"
+      {/* Replace ScrollView with FlatList */}
+      <FlatList
+        data={movies}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={3}
+        columnWrapperStyle={{
+          justifyContent: "flex-start",
+          gap: 12,
+          paddingRight: 5,
+          marginBottom: 10,
+        }}
+        // Remove scrollEnabled={false}
+        className="mt-2 px-5 pb-32" // Add horizontal padding here
+        ListHeaderComponent={
+          <View>
+            <Image
+              source={icons.logo}
+              className="w-12 h-10 mt-10 mb-2 mx-auto"
             />
-          </View>
-        )}
 
-        <>
-          <Text className="text-lg text-white font-bold my-3">Latest Movies</Text>
-          <FlatList
-            data={movies}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={3}
-            columnWrapperStyle={{
-              justifyContent: 'flex-start',
-              gap: 10,
-              paddingRight: 5,
-              marginBottom: 8,
-            }}
-            scrollEnabled={false}
-            className="mt-2 pb-32"
-            renderItem={({item}) => (
-                <MovieCard
-                  {...item}
+            {moviesLoading ? (
+              <ActivityIndicator
+                size="large"
+                color={"#FF6467"}
+                className="mt-10 self-center"
+              />
+            ) : moviesError ? (
+              <Text>Error: {moviesError?.message}</Text>
+            ) : (
+              // SearchBar
+              <View className="mt-5">
+                <SearchBar
+                  onPress={() => router.push("/search")}
+                  placeholder="Search for a movie"
                 />
+              </View>
             )}
-          />
-        </>
 
-      </ScrollView>
+            <Text className="text-lg text-white font-bold my-3">
+              Latest Movies
+            </Text>
+          </View>
+        }
+        renderItem={({ item }) => <MovieCard {...item} />}
+        contentContainerStyle={{
+          paddingBottom: insets.bottom + 20, // Add padding for the bottom inset
+        }}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
