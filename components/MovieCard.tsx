@@ -23,7 +23,7 @@ const MovieCard = ({id, poster_path, title, vote_average, release_date}: Movie) 
                     <Text className='text-sm text-white font-bold uppercase'>{Math.round(vote_average/2)}</Text>
                 </View>
                 <View className='flex-row items-center justify-between'>
-                    <Text className='text-sm  text-slate-500 font-semibold mt-1'>
+                    <Text className='text-sm  text-ui_200 font-semibold mt-1'>
                         {release_date?.split('-')[0]}
                     </Text>
                 </View>
