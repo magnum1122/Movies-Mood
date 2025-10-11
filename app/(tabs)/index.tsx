@@ -32,7 +32,7 @@ export default function Index() {
 
   return (
     <View
-      style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+      // style={{ paddingTop: insets.top}}
       className="flex-1  bg-primary"
     >
       <Image source={images.bg} className="absolute w-full z-0" />
@@ -53,7 +53,7 @@ export default function Index() {
           <View>
             <Image
               source={icons.logo}
-              className="w-12 h-10 mt-10 mb-2 mx-auto"
+              className="w-12 h-10 mt-16 mb-2 mx-auto"
             />
 
             {moviesLoading || terendingLoading ? (

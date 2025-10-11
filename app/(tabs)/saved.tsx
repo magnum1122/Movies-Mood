@@ -6,7 +6,7 @@ export default function Saved() {
 
   return (
     <View 
-      style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+      // style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
       className="flex-1  bg-primary"
     >
       <Text className="font-bold text-4xl text-white">Movie Mood</Text>

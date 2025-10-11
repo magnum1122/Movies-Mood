@@ -6,7 +6,6 @@ export default function Profile() {
 
   return (
     <View 
-      style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
       className="flex-1  bg-primary"
     >
       <Text className="font-bold text-4xl text-white">Movie Mood</Text>
