@@ -1,10 +1,10 @@
 import MovieCard from "@/components/MovieCard";
-import TrendingCard from '@/components/TrendingCard'
 import SearchBar from "@/components/SearchBar";
+import TrendingCard from '@/components/TrendingCard';
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
-import { getTrendinMovies } from "@/services/appwrite";
+import { getTrendinMovies } from "@/services/appwrite/appwrite";
 import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";

@@ -3,13 +3,14 @@ import { Client, Databases, ID, Query } from "react-native-appwrite";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!;
 
-const client = new Client()
+export const appwriteClient = new Client()
   .setEndpoint("https://fra.cloud.appwrite.io/v1")
-  .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
+  .setProject(PROJECT_ID)
   .setPlatform('com.magnum1122.moviesmood');
 
-const database = new Databases(client);
+const database = new Databases(appwriteClient);
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
   // check if a record of that search has already been stored
@@ -17,6 +18,8 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
       Query.equal("searchTerm", query),
     ])
+
+  // if a document is found, increment the searchCount fleld
 
     if (result.documents.length > 0) {
       const existingMovie = result.documents[0];
@@ -28,7 +31,10 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
           count: existingMovie.count + 1,
         }
       );
-    } else {
+    }
+    // if no document is found
+    // create a new document in Appwrite database -> 1
+    else {
       await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
         searchTerm: query,
         movie_id: movie.id,
@@ -41,11 +47,9 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
     console.log(error);
     throw error;
   }
-  // if a document is found, increment the searchCount fleld
-  // if no document is found
-  // create a new document in Appwrite database -> 1
 };
 
+// Get trending movies
 export const getTrendinMovies = async(): Promise<TrendingMovie[] | undefined> => {
   try{
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
