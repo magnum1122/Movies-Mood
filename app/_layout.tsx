@@ -1,3 +1,4 @@
+import { AppwriteProvider } from "@/services/appwrite/AppwriteContext";
 import "./global.css"
 import { Stack } from "expo-router";
 import { StatusBar } from "react-native";
@@ -7,19 +8,23 @@ export default function RootLayout() {
 
   return(
     <SafeAreaProvider>
-    <StatusBar hidden={true}/>
-    
-    
-    <Stack screenOptions={{headerShown: false}}>
-      <Stack.Screen
-        name="(tabs)"
-        options={{headerShown: false}} 
-      />
-      <Stack.Screen
-        name="movies/[id]"
-        options={{headerShown: false}}
-      />
-    </Stack>
+      <AppwriteProvider>
+        <StatusBar hidden={true}/>
+        <Stack screenOptions={{headerShown: false}}>
+          <Stack.Screen
+          name="(protected)"
+          options={{headerShown: false}}
+          />
+          <Stack.Screen
+          name="Login"
+          options={{headerShown: false}}
+          />
+          <Stack.Screen
+          name="SignUp"
+          options={{headerShown: false}}
+          />
+        </Stack>
+      </AppwriteProvider>
     </SafeAreaProvider>
   )
 }
