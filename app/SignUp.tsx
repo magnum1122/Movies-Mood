@@ -13,7 +13,7 @@ import { AppwriteContext } from "@/services/appwrite/AppwriteContext";
 
 const SignUp = () => {
   const route = useRouter();
-  const { appwrite, setIsLoggedIn } = useContext(AppwriteContext);
+  const { appwrite } = useContext(AppwriteContext);
   const [error, setError] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -41,7 +41,6 @@ const SignUp = () => {
       .createAccount(user)
       .then((response) => {
         if(response) {
-            // route.back();
             route.replace("/Login");
         }
       })
@@ -56,7 +55,7 @@ const SignUp = () => {
   return (
     <KeyboardAvoidingView behavior={"padding"} className="flex-1 bg-primary">
       <Image
-        source={require("@/assets/images/woman-8725575_1280.png")}
+        source={require("@/assets/images/loginbanner.png")}
         resizeMode={"cover"}
         className="w-full h-1/3"
       />
@@ -80,7 +79,6 @@ const SignUp = () => {
         </View>
         {/* Email */}
         <View className="mx-8 flex-row p-2 items-center bg-ui_200 h-12 my-4 rounded-xl elevation-md">
-          {/* <Ionicons name='person-circle-sharp' size={21} color={'Grey'}/> */}
           <Ionicons name="mail-sharp" size={21} color={"Grey"} />
           <TextInput
           value={email}
