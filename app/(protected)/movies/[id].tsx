@@ -68,13 +68,13 @@ const MovieDetails = () => {
         </View>
 
         <View className="flex-col items-start justify-center mt-2 px-2">
-          <View className="flex-row items-center gap-x-1 mt-1">
+          <View className="flex-row items-center gap-x-2 mt-1">
             <Text className="text-white font-bold text-2xl">{movie?.title}</Text>
             <TouchableOpacity 
             onPress={() => setSaved(!saved)}
             >
               {/* Saved Icon */}
-              <Ionicons name={saved? 'bookmark' : 'bookmark-outline'} size={28} color="#C11007" className="ml-72"/>
+              <Ionicons name={saved? 'bookmark' : 'bookmark-outline'} size={28} color="#C11007" className=""/>
             </TouchableOpacity>
           </View>
           <View className="flex-row items-center gap-x-1 mt-1">
