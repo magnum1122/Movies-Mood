@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { isMovieSaved, saveMovie, unsaveMovie } from "@/app/utils/asyncstorage";
 
 interface MovieInfoProp {
   label: string;
@@ -37,25 +38,61 @@ const MovieInfo = ({ label, value }: MovieInfoProp) => (
 
 const MovieDetails = () => {
   const insets = useSafeAreaInsets();
-  const [saved, setSaved] = useState(false)
+  const [saved, setSaved] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { id } = useLocalSearchParams();
   const { data: movie, loading } = useFetch(() =>
     fetchMovieDetails(id as string)
   );
 
+  // Check saved status when component mounts or movie changes
+  useEffect(() => {
+    if (id) {
+      checkSavedStatus();
+    }
+  }, [id]);
+
+  const checkSavedStatus = async () => {
+    const isSaved = await isMovieSaved(Number(id));
+    setSaved(isSaved);
+  };
+
+  const handleSaveToggle = async () => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
+    try {
+      if (saved) {
+        const success = await unsaveMovie(Number(id));
+        if (success) {
+          setSaved(false);
+        }
+      } else {
+        const success = await saveMovie(Number(id));
+        if (success) {
+          setSaved(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling save:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   if(loading){
     return(
-    <View className="flex-1 justify-center items-center bg-primary ">
-      <ActivityIndicator size={50} color={"#C11007"}/>
-    </View>
+      <View className="flex-1 justify-center items-center bg-primary">
+        <ActivityIndicator size={50} color={"#C11007"}/>
+      </View>
     )
   }
+
   return (
     <View
       style={{ paddingBottom: insets.bottom }}
-      className="flex-1  bg-primary"
+      className="flex-1 bg-primary"
     >
-      {/* <StatusBar hidden={true}/> */}
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         <View>
           <Image
@@ -71,10 +108,14 @@ const MovieDetails = () => {
           <View className="flex-row items-center gap-x-2 mt-1">
             <Text className="text-white font-bold text-2xl">{movie?.title}</Text>
             <TouchableOpacity 
-            onPress={() => setSaved(!saved)}
+              onPress={handleSaveToggle}
+              disabled={isProcessing}
             >
-              {/* Saved Icon */}
-              <Ionicons name={saved? 'bookmark' : 'bookmark-outline'} size={28} color="#C11007" className=""/>
+              <Ionicons 
+                name={saved ? 'bookmark' : 'bookmark-outline'} 
+                size={24} 
+                color="#C11007"
+              />
             </TouchableOpacity>
           </View>
           <View className="flex-row items-center gap-x-1 mt-1">
@@ -126,8 +167,9 @@ const MovieDetails = () => {
           />
         </View>
       </ScrollView>
-      <TouchableOpacity className="absolute bottom-11 left-0 right-0 mx-5 bg-ui_700 rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
-      onPress={router.back}
+      <TouchableOpacity 
+        className="absolute bottom-11 left-0 right-0 mx-5 bg-ui_700 rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
+        onPress={router.back}
       >
         <Ionicons name="arrow-back-sharp" size={16} color={"#fff"} />
         <Text className="text-white font-semibold text-base"> Go Back</Text>
